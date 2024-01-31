@@ -2,8 +2,14 @@
   "name": "nodejs-file-manager",
   "version": "1.0.0",
   "description": "",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "type": "module",
   "main": "main.js",
-  "scripts": {},
+  "scripts": {
+    "start": "node src/main.js"
+  },
   "author": "",
   "license": "ISC"
 }
