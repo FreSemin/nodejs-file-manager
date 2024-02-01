@@ -3,6 +3,14 @@ import { stdin as input, stdout as output } from 'node:process';
 import { getProcessArgument } from '../cli/args.js';
 
 class FileManager {
+  #cliAllowedCmds = [
+    {
+      name: '.exit',
+      args: [],
+      method: this.#rlClose.bind(this)
+    }
+  ];
+
   #username = '';
 
   #rl = null;
