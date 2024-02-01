@@ -34,18 +34,34 @@ class FileManager {
     console.log(`You are currently in ${this.#currentWorkDir}`);
   };
 
-  #onRlLine(line) {
+  async #onRlLine(line) {
+    try {
+
     const parsedLineArgs = line.split(' ');
     const userCmd = parsedLineArgs[0].trim().toLowerCase();
 
     const cliCmd = this.#cliAllowedCmds.find((cmd) => cmd.name === userCmd);
 
     if (cliCmd) {
-      cliCmd.method();
+        this.#rl.pause();
+
+        await cliCmd.method.call(this);
+
       this.#logCurrentWorkDir();
+
+        this.#rl.prompt();
     } else {
       console.log(`Unknown command: ${userCmd}`);
+
+        this.#logCurrentWorkDir();
+
+        this.#rl.prompt();
+      }
+    } catch {
+      console.log('Operation Failed');
+
       this.#logCurrentWorkDir();
+
       this.#rl.prompt();
     }
   }
