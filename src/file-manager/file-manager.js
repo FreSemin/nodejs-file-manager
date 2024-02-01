@@ -1,9 +1,7 @@
 class FileManager {
-  constructor() {
-    this.init();
-  }
+  constructor() { }
 
-  init() {
+  start() {
     console.log('File Manager Inited!');
   };
 }
