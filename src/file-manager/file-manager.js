@@ -1,6 +1,7 @@
 import * as readline from 'node:readline/promises';
 import { stdin as input, stdout as output } from 'node:process';
 import { getProcessArgument } from '../cli/args.js';
+import { getUserHomeDir } from '../os/os.js';
 
 class FileManager {
   #cliAllowedCmds = [
@@ -12,10 +13,13 @@ class FileManager {
   ];
 
   #username = '';
+  #currentWorkDir = '';
 
   #rl = null;
 
-  constructor() { }
+  constructor() {
+    this.#currentWorkDir = getUserHomeDir();
+  }
 
   // TODO: get username from os
   #welcomeUser() {
@@ -26,6 +30,10 @@ class FileManager {
     console.log(`Welcome to the File Manager, ${this.#username}!`);
   }
 
+  #logCurrentWorkDir() {
+    console.log(`You are currently in ${this.#currentWorkDir}`);
+  };
+
   #onRlLine(line) {
     const parsedLineArgs = line.split(' ');
     const userCmd = parsedLineArgs[0].trim().toLowerCase();
@@ -34,8 +42,10 @@ class FileManager {
 
     if (cliCmd) {
       cliCmd.method();
+      this.#logCurrentWorkDir();
     } else {
       console.log(`Unknown command: ${userCmd}`);
+      this.#logCurrentWorkDir();
       this.#rl.prompt();
     }
   }
@@ -56,6 +66,8 @@ class FileManager {
     this.#rl.on('line', (line) => this.#onRlLine(line));
 
     this.#rl.on('close', () => this.#onRlClose());
+
+    this.#logCurrentWorkDir();
 
     this.#rl.prompt();
   };
