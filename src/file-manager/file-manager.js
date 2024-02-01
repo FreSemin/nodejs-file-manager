@@ -25,6 +25,17 @@ class FileManager {
 
     console.log(`Welcome to the File Manager, ${this.#username}!`);
   }
+
+  #onRlLine(line) {
+    const parsedLine = line.trim().toLowerCase();
+
+    const cliCmd = this.#cliAllowedCmds.find((cmd) => cmd.name === parsedLine);
+
+    if (cliCmd) {
+      cliCmd.method();
+    }
+  }
+
   #rlClose() {
     this.#rl.close();
   }
@@ -37,6 +48,8 @@ class FileManager {
     this.#welcomeUser();
 
     this.#rl = readline.createInterface({ input, output });
+
+    this.#rl.on('line', (line) => this.#onRlLine(line));
 
     this.#rl.on('close', () => this.#onRlClose());
   };
