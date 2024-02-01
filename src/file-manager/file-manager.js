@@ -17,6 +17,9 @@ class FileManager {
 
     console.log(`Welcome to the File Manager, ${this.#username}!`);
   }
+  #rlClose() {
+    this.#rl.close();
+  }
 
   #onRlClose() {
     console.log(`Thank you for using File Manager, ${this.#username}, goodbye!`);
