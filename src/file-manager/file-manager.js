@@ -52,6 +52,8 @@ class FileManager {
     this.#rl.on('line', (line) => this.#onRlLine(line));
 
     this.#rl.on('close', () => this.#onRlClose());
+
+    this.#rl.prompt();
   };
 }
 
