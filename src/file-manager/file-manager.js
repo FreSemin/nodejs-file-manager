@@ -1,8 +1,24 @@
+import { getProcessArgument } from '../cli/args.js';
+
 class FileManager {
-  constructor() { }
+
+  #username = '';
+
+  constructor() {
+
+  }
+
+  // TODO: get username from os
+  #welcomeUser() {
+    if (!this.#username) {
+      this.#username = getProcessArgument('username2');
+    }
+
+    console.log(`Welcome to the File Manager, ${this.username}!`);
+  }
 
   start() {
-    console.log('File Manager Inited!');
+    this.#welcomeUser();
   };
 }
 
