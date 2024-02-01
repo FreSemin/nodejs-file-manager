@@ -57,16 +57,15 @@ class FileManager {
 
   async #onRlLine(line) {
     try {
-
-      const parsedLineArgs = line.split(' ');
-      const userCmd = parsedLineArgs[0].trim().toLowerCase();
+      const [cmd, ...parsedLineArgs] = line.split(' ');
+      const userCmd = cmd.trim().toLowerCase();
 
       const cliCmd = this.#cliAllowedCmds.find((cmd) => cmd.name === userCmd);
 
       if (cliCmd) {
         this.#rl.pause();
 
-        await cliCmd.method.call(this);
+        await cliCmd.method.call(this, parsedLineArgs);
 
         this.#logCurrentWorkDir();
 
