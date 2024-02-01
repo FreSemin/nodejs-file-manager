@@ -27,12 +27,16 @@ class FileManager {
   }
 
   #onRlLine(line) {
-    const parsedLine = line.trim().toLowerCase();
+    const parsedLineArgs = line.split(' ');
+    const userCmd = parsedLineArgs[0].trim().toLowerCase();
 
-    const cliCmd = this.#cliAllowedCmds.find((cmd) => cmd.name === parsedLine);
+    const cliCmd = this.#cliAllowedCmds.find((cmd) => cmd.name === userCmd);
 
     if (cliCmd) {
       cliCmd.method();
+    } else {
+      console.log(`Unknown command: ${userCmd}`);
+      this.#rl.prompt();
     }
   }
 
