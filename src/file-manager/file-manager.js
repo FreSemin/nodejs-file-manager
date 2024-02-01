@@ -11,10 +11,10 @@ class FileManager {
   // TODO: get username from os
   #welcomeUser() {
     if (!this.#username) {
-      this.#username = getProcessArgument('username2');
+      this.#username = getProcessArgument('username');
     }
 
-    console.log(`Welcome to the File Manager, ${this.username}!`);
+    console.log(`Welcome to the File Manager, ${this.#username}!`);
   }
 
   start() {
