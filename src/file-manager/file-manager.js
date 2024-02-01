@@ -27,7 +27,7 @@ class FileManager {
 
     this.#rl = readline.createInterface({ input, output });
 
-    this.#rl.on('close', this.#onRlClose.bind(this));
+    this.#rl.on('close', () => this.#onRlClose());
   };
 }
 
