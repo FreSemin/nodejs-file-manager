@@ -23,3 +23,16 @@ export function getPathDirName(dirPath) {
 
   return path.dirname(dirPath);
 }
+
+export function fixDestinationPathWindows(destinationPath) {
+  if (
+    destinationPath.endsWith(':..')
+    || destinationPath.endsWith(':.')
+    || destinationPath.endsWith(':.\\')
+    || destinationPath.endsWith(':..\\')
+  ) {
+    return destinationPath.replace(/:\.\.?\\?$/gm, ':\\');
+  }
+
+  return destinationPath;
+}
