@@ -53,7 +53,7 @@ class FileManager {
       .catch(() => {
         this.#currentWorkDirPath = getUserHomeDir();
 
-        throw new Error('Operation Failed');
+        throw new OperationFailed();
       });
 
     this.#currentWorkDirPath = upDirPath;
