@@ -5,7 +5,8 @@ import { access } from 'node:fs/promises';
 import { getProcessArgument } from '../cli/args.js';
 import { getPathDirName, fixDestinationPathWindows } from '../utils/path.util.js';
 import { getUserHomeDir } from '../os/os.js';
-import { ROOT_DIR, PATH_UP } from '../constants/constants.js';
+import { ROOT_DIR, PATH_UP, ERROR_OPERATION_FAIL_TEXT } from '../constants/constants.js';
+import OperationFailed from '../utils/operation-fail.error.js';
 
 class FileManager {
   #cliAllowedCmds = [
@@ -92,7 +93,7 @@ class FileManager {
 
         this.#currentWorkDir = absolutePath;
       } catch {
-        throw new Error('Operation Failed');
+        throw new OperationFailed();
       }
     }
   }
@@ -124,7 +125,7 @@ class FileManager {
         this.#rl.prompt();
       }
     } catch {
-      console.log('Operation Failed');
+      console.log(ERROR_OPERATION_FAIL_TEXT);
 
       this.#logCurrentWorkDir();
 
