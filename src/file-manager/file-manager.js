@@ -12,17 +12,14 @@ class FileManager {
   #cliAllowedCmds = [
     {
       name: 'cd',
-      args: [],
       method: this.#changeDir
     },
     {
       name: 'up',
-      args: [],
       method: this.#dirUp,
     },
     {
       name: '.exit',
-      args: [],
       method: this.#rlClose,
     }
   ];
