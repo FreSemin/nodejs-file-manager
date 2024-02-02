@@ -120,6 +120,8 @@ class FileManager {
 
   #onRlClose() {
     console.log(`Thank you for using File Manager, ${this.#username}, goodbye!`);
+
+    process.exit(1);
   }
 
   start() {
