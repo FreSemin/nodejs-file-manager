@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { ROOT_DIR, PATH_IN, PATH_EMPTY } from '../constants/constants.js';
 
-export function getPathDirName(dirPath) {
+export function getUpDirPath(dirPath) {
   const parsedPath = path.parse(dirPath);
 
   const isRoot = (parsedPath.root === parsedPath.dir);

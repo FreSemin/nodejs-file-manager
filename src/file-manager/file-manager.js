@@ -3,7 +3,7 @@ import path from 'node:path';
 import { stdin as input, stdout as output } from 'node:process';
 import { access } from 'node:fs/promises';
 import { getProcessArgument } from '../cli/args.js';
-import { getPathDirName, fixDestinationPathWindows } from '../utils/path.util.js';
+import { getUpDirPath, fixDestinationPathWindows } from '../utils/path.util.js';
 import { getUserHomeDir } from '../os/os.js';
 import { ROOT_DIR, PATH_UP, ERROR_OPERATION_FAIL_TEXT } from '../constants/constants.js';
 import OperationFailed from '../utils/operation-fail.error.js';
@@ -43,16 +43,16 @@ class FileManager {
   }
 
   async #dirUp() {
-    const upperDir = getPathDirName(this.#currentWorkDir);
+    const upDirPath = getUpDirPath(this.#currentWorkDir);
 
-    await access(upperDir)
+    await access(upDirPath)
       .catch(() => {
         this.#currentWorkDir = getUserHomeDir();
 
         throw new Error('Operation Failed');
       });
 
-    this.#currentWorkDir = upperDir;
+    this.#currentWorkDir = upDirPath;
   }
 
   // TODO: add check for quotes '' in path start and in the end
