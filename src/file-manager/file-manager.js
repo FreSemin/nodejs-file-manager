@@ -66,7 +66,6 @@ class FileManager {
     // Fix: Windows going up (..\..\..\) path bug
     // Use next var if you faced with problems on your platform
     // let fixedDestinationPath = normalizedDestinationPath;
-
     let fixedDestinationPath = fixDestinationPathWindows(normalizedDestinationPath);
 
     let relativePath = path.join(this.#currentWorkDirPath, fixedDestinationPath);
@@ -105,10 +104,10 @@ class FileManager {
 
   async #onRlLine(line) {
     try {
-      const [cmd, ...parsedLineArgs] = line.split(' ');
-      const userCmd = cmd.trim().toLowerCase();
+      const [userCmd, ...parsedLineArgs] = line.split(' ');
+      const normalizedCmd = userCmd.trim().toLowerCase();
 
-      const cliCmd = this.#cliCmds.find((cmd) => cmd.name === userCmd);
+      const cliCmd = this.#cliCmds.find((cmd) => cmd.name === normalizedCmd);
 
       if (cliCmd) {
         this.#rl.pause();
@@ -119,7 +118,7 @@ class FileManager {
 
         this.#rl.prompt();
       } else {
-        console.log(`Unknown command: ${userCmd}`);
+        console.log(`Invalid input`);
 
         this.#logCurrentWorkDirPath();
 
