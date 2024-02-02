@@ -6,7 +6,6 @@ import { getProcessArgument } from '../cli/args.js';
 import { getPathDirName } from '../utils/path.util.js';
 import { getUserHomeDir } from '../os/os.js';
 
-
 class FileManager {
   #cliAllowedCmds = [
     {
@@ -58,10 +57,22 @@ class FileManager {
   }
 
   // TODO: add check for quotes '' in path start and in the end
-  async #changeDir([destinationPath, ...args]) {
+  async #changeDir([destinationPath]) {
     const normalizedDestinationPath = path.normalize(destinationPath);
 
-    const relativePath = path.join(this.#currentWorkDir, normalizedDestinationPath);
+    let relativePath = path.join(this.#currentWorkDir, normalizedDestinationPath);
+
+    const parsedPath = path.parse(relativePath);
+
+    // Fix path to go root ('/') on windows
+    if (this.#currentWorkDir === relativePath && destinationPath === '..') {
+      relativePath = path.normalize('/');
+    }
+
+    // Fix path when going upper from root
+    if (parsedPath.root === parsedPath.dir && parsedPath.base === '..') {
+      relativePath = path.normalize('/');
+    }
 
     try {
       await access(relativePath);
