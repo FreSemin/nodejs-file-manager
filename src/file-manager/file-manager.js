@@ -5,7 +5,11 @@ import { access } from 'node:fs/promises';
 import { getProcessArgument } from '../cli/args.js';
 import { getUpDirPath, fixDestinationPathWindows } from '../utils/path.util.js';
 import { getUserHomeDir } from '../os/os.js';
-import { ROOT_DIR, PATH_UP, ERROR_OPERATION_FAIL_TEXT } from '../constants/constants.js';
+import {
+  ROOT_DIR, PATH_UP,
+  ERROR_OPERATION_FAIL_TEXT,
+  USERNAME_ARG
+} from '../constants/constants.js';
 import OperationFailed from '../utils/operation-fail.error.js';
 
 class FileManager {
@@ -36,7 +40,7 @@ class FileManager {
   // TODO: get username from os
   #welcomeUser() {
     if (!this.#username) {
-      this.#username = getProcessArgument('username');
+      this.#username = getProcessArgument(USERNAME_ARG);
     }
 
     console.log(`Welcome to the File Manager, ${this.#username}!`);
