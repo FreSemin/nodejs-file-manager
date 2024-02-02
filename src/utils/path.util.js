@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { PATH_IN, PATH_EMPTY } from '../constants/constants.js';
+import { ROOT_DIR, PATH_IN, PATH_EMPTY } from '../constants/constants.js';
 
 export function getPathDirName(dirPath) {
   const parsedPath = path.parse(dirPath);
@@ -17,7 +17,7 @@ export function getPathDirName(dirPath) {
   }
 
   if ((isRoot) && (pathBase === PATH_EMPTY || pathBase === PATH_IN)) {
-    upperPath = path.join('/');
+    upperPath = path.join(ROOT_DIR);
     return path.normalize(upperPath);
   }
 
