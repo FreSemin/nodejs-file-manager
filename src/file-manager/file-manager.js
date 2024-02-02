@@ -9,7 +9,7 @@ import { ROOT_DIR, PATH_UP, ERROR_OPERATION_FAIL_TEXT } from '../constants/const
 import OperationFailed from '../utils/operation-fail.error.js';
 
 class FileManager {
-  #cliAllowedCmds = [
+  #cliCmds = [
     {
       name: 'cd',
       method: this.#changeDir
@@ -104,7 +104,7 @@ class FileManager {
       const [cmd, ...parsedLineArgs] = line.split(' ');
       const userCmd = cmd.trim().toLowerCase();
 
-      const cliCmd = this.#cliAllowedCmds.find((cmd) => cmd.name === userCmd);
+      const cliCmd = this.#cliCmds.find((cmd) => cmd.name === userCmd);
 
       if (cliCmd) {
         this.#rl.pause();
