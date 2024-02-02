@@ -10,7 +10,7 @@ export function getPathDirName(dirPath) {
   let upperPath = '';
 
   // Would it work for MacOS and Linux?
-  if ((isRoot) && pathBase !== '.') {
+  if ((isRoot) && pathBase !== '' && pathBase !== '.') {
     upperPath = path.join(parsedPath.root);
     return path.normalize(upperPath);
   }
