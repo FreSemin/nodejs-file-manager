@@ -5,6 +5,7 @@ import { access } from 'node:fs/promises';
 import { getProcessArgument } from '../cli/args.js';
 import { getPathDirName } from '../utils/path.util.js';
 import { getUserHomeDir } from '../os/os.js';
+import { ROOT_DIR, PATH_UP } from '../constants/constants.js';
 
 class FileManager {
   #cliAllowedCmds = [
@@ -65,13 +66,13 @@ class FileManager {
     const parsedPath = path.parse(relativePath);
 
     // Fix path to go root ('/') on windows
-    if (this.#currentWorkDir === relativePath && destinationPath === '..') {
-      relativePath = path.normalize('/');
+    if (this.#currentWorkDir === relativePath && destinationPath === PATH_UP) {
+      relativePath = path.normalize(ROOT_DIR);
     }
 
     // Fix path when going upper from root
-    if (parsedPath.root === parsedPath.dir && parsedPath.base === '..') {
-      relativePath = path.normalize('/');
+    if (parsedPath.root === parsedPath.dir && parsedPath.base === PATH_UP) {
+      relativePath = path.normalize(ROOT_DIR);
     }
 
     try {
