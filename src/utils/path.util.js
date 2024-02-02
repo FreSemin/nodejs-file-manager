@@ -3,15 +3,19 @@ import path from 'node:path';
 export function getPathDirName(dirPath) {
   const parsedPath = path.parse(dirPath);
 
+  const isRoot = (parsedPath.root === parsedPath.dir);
+
+  const pathBase = parsedPath.base;
+
   let upperPath = '';
 
-  if ((parsedPath.root === parsedPath.dir) && parsedPath.base !== '') {
+  // Would it work for MacOS and Linux?
+  if ((isRoot) && pathBase !== '.') {
     upperPath = path.join(parsedPath.root);
     return path.normalize(upperPath);
   }
 
-  // Would it work on MacOS and Linux?
-  if ((parsedPath.root === parsedPath.dir) && parsedPath.base === '') {
+  if ((isRoot) && (pathBase === '' || pathBase === '.')) {
     upperPath = path.join('/');
     return path.normalize(upperPath);
   }
