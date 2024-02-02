@@ -1,4 +1,5 @@
 import * as readline from 'node:readline/promises';
+import path from 'node:path';
 import { stdin as input, stdout as output } from 'node:process';
 import { access } from 'node:fs/promises';
 import { getProcessArgument } from '../cli/args.js';
@@ -8,6 +9,11 @@ import { getUserHomeDir } from '../os/os.js';
 
 class FileManager {
   #cliAllowedCmds = [
+    {
+      name: 'cd',
+      args: [],
+      method: this.#changeDir
+    },
     {
       name: 'up',
       args: [],
@@ -49,6 +55,28 @@ class FileManager {
       });
 
     this.#currentWorkDir = upperDir;
+  }
+
+  // TODO: add check for quotes '' in path start and in the end
+  async #changeDir([destinationPath, ...args]) {
+    const normalizedDestinationPath = path.normalize(destinationPath);
+
+    const relativePath = path.join(this.#currentWorkDir, normalizedDestinationPath);
+
+    try {
+      await access(relativePath);
+      this.#currentWorkDir = relativePath;
+    } catch {
+      try {
+        const absolutePath = path.join(normalizedDestinationPath);
+
+        await access(absolutePath);
+
+        this.#currentWorkDir = absolutePath;
+      } catch {
+        throw new Error('Operation Failed');
+      }
+    }
   }
 
   #logCurrentWorkDir() {
