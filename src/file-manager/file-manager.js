@@ -3,7 +3,7 @@ import path from 'node:path';
 import { stdin as input, stdout as output } from 'node:process';
 import { access } from 'node:fs/promises';
 import { getProcessArgument } from '../cli/args.js';
-import { getPathDirName } from '../utils/path.util.js';
+import { getPathDirName, fixDestinationPathWindows } from '../utils/path.util.js';
 import { getUserHomeDir } from '../os/os.js';
 import { ROOT_DIR, PATH_UP } from '../constants/constants.js';
 
@@ -61,7 +61,13 @@ class FileManager {
   async #changeDir([destinationPath]) {
     const normalizedDestinationPath = path.normalize(destinationPath);
 
-    let relativePath = path.join(this.#currentWorkDir, normalizedDestinationPath);
+    // Fix: Windows going up (..\..\..\) path bug
+    // Use next var if you faced with problems on your platform
+    // let fixedDestinationPath = normalizedDestinationPath;
+
+    let fixedDestinationPath = fixDestinationPathWindows(normalizedDestinationPath);
+
+    let relativePath = path.join(this.#currentWorkDir, fixedDestinationPath);
 
     const parsedPath = path.parse(relativePath);
 
@@ -80,7 +86,7 @@ class FileManager {
       this.#currentWorkDir = relativePath;
     } catch {
       try {
-        const absolutePath = path.join(normalizedDestinationPath);
+        const absolutePath = path.join(fixedDestinationPath);
 
         await access(absolutePath);
 
