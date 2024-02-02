@@ -25,12 +25,12 @@ class FileManager {
   ];
 
   #username = '';
-  #currentWorkDir = '';
+  #currentWorkDirPath = '';
 
   #rl = null;
 
   constructor() {
-    this.#currentWorkDir = getUserHomeDir();
+    this.#currentWorkDirPath = getUserHomeDir();
   }
 
   // TODO: get username from os
@@ -43,16 +43,16 @@ class FileManager {
   }
 
   async #dirUp() {
-    const upDirPath = getUpDirPath(this.#currentWorkDir);
+    const upDirPath = getUpDirPath(this.#currentWorkDirPath);
 
     await access(upDirPath)
       .catch(() => {
-        this.#currentWorkDir = getUserHomeDir();
+        this.#currentWorkDirPath = getUserHomeDir();
 
         throw new Error('Operation Failed');
       });
 
-    this.#currentWorkDir = upDirPath;
+    this.#currentWorkDirPath = upDirPath;
   }
 
   // TODO: add check for quotes '' in path start and in the end
@@ -65,12 +65,12 @@ class FileManager {
 
     let fixedDestinationPath = fixDestinationPathWindows(normalizedDestinationPath);
 
-    let relativePath = path.join(this.#currentWorkDir, fixedDestinationPath);
+    let relativePath = path.join(this.#currentWorkDirPath, fixedDestinationPath);
 
     const parsedPath = path.parse(relativePath);
 
     // Fix path to go root ('/') on windows
-    if (this.#currentWorkDir === relativePath && destinationPath === PATH_UP) {
+    if (this.#currentWorkDirPath === relativePath && destinationPath === PATH_UP) {
       relativePath = path.normalize(ROOT_DIR);
     }
 
@@ -81,22 +81,22 @@ class FileManager {
 
     try {
       await access(relativePath);
-      this.#currentWorkDir = relativePath;
+      this.#currentWorkDirPath = relativePath;
     } catch {
       try {
         const absolutePath = path.join(fixedDestinationPath);
 
         await access(absolutePath);
 
-        this.#currentWorkDir = absolutePath;
+        this.#currentWorkDirPath = absolutePath;
       } catch {
         throw new OperationFailed();
       }
     }
   }
 
-  #logCurrentWorkDir() {
-    console.log(`You are currently in ${this.#currentWorkDir}`);
+  #logCurrentWorkDirPath() {
+    console.log(`You are currently in ${this.#currentWorkDirPath}`);
   };
 
   async #onRlLine(line) {
@@ -111,20 +111,20 @@ class FileManager {
 
         await cliCmd.method.call(this, parsedLineArgs);
 
-        this.#logCurrentWorkDir();
+        this.#logCurrentWorkDirPath();
 
         this.#rl.prompt();
       } else {
         console.log(`Unknown command: ${userCmd}`);
 
-        this.#logCurrentWorkDir();
+        this.#logCurrentWorkDirPath();
 
         this.#rl.prompt();
       }
     } catch {
       console.log(ERROR_OPERATION_FAIL_TEXT);
 
-      this.#logCurrentWorkDir();
+      this.#logCurrentWorkDirPath();
 
       this.#rl.prompt();
     }
@@ -149,7 +149,7 @@ class FileManager {
 
     this.#rl.on('close', () => this.#onRlClose());
 
-    this.#logCurrentWorkDir();
+    this.#logCurrentWorkDirPath();
 
     this.#rl.prompt();
   };
