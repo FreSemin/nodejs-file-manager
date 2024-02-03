@@ -73,18 +73,6 @@ class FileManager {
 
     let relativePath = path.join(this.#currentWorkDirPath, fixedDestinationPath);
 
-    const parsedPath = path.parse(relativePath);
-
-    // Fix path to go root ('/') on windows
-    if (this.#currentWorkDirPath === relativePath && destinationPath === PATH_UP) {
-      relativePath = path.normalize(ROOT_DIR);
-    }
-
-    // Fix path when going upper from root
-    if (parsedPath.root === parsedPath.dir && parsedPath.base === PATH_UP) {
-      relativePath = path.normalize(ROOT_DIR);
-    }
-
     try {
       await access(relativePath);
       this.#currentWorkDirPath = relativePath;
