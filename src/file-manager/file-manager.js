@@ -67,18 +67,18 @@ class FileManager {
     const normalizedDestinationPath = path.normalize(destinationPath);
 
     // Fix: Windows going up (..\..\..\) path bug
-    // Use next var if you faced with problems on your platform
+    // Use next variable if you faced with problems on your platform
     // let fixedDestinationPath = normalizedDestinationPath;
     let fixedDestinationPath = fixDestinationPathWindows(normalizedDestinationPath);
 
-    let relativePath = path.join(this.#currentWorkDirPath, fixedDestinationPath);
+    let relativePath = path.normalize(path.join(this.#currentWorkDirPath, fixedDestinationPath));
 
     try {
       await access(relativePath);
       this.#currentWorkDirPath = relativePath;
     } catch {
       try {
-        const absolutePath = path.join(fixedDestinationPath);
+        const absolutePath = path.normalize(path.join(fixedDestinationPath));
 
         await access(absolutePath);
 
