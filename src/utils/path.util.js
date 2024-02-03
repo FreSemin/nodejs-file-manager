@@ -36,3 +36,17 @@ export function fixDestinationPathWindows(destinationPath) {
 
   return destinationPath;
 }
+
+export function parseLineArgs(inputStr) {
+  if (!inputStr) {
+    throw new Error('Invalid Input');
+  }
+
+  let normalizedStr = inputStr.trim().toLowerCase();
+
+  const regexp = /([\w\.\\/:]+)|("[\w\s\.\\/:]+")/g;
+
+  const args = Array.from(normalizedStr.match(regexp));
+
+  return args.map((arg) => arg.replaceAll('\"', ''));
+}
