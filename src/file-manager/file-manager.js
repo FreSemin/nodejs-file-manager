@@ -1,9 +1,13 @@
 import * as readline from 'node:readline/promises';
-import path from 'node:path';
+import path, { parse } from 'node:path';
 import { stdin as input, stdout as output } from 'node:process';
 import { access } from 'node:fs/promises';
 import { getProcessArgument } from '../cli/args.js';
-import { getUpDirPath, fixDestinationPathWindows } from '../utils/path.util.js';
+import {
+  getUpDirPath,
+  fixDestinationPathWindows,
+  parseLineArgs
+} from '../utils/path.util.js';
 import { getUserHomeDir } from '../os/os.js';
 import {
   ROOT_DIR, PATH_UP,
@@ -104,15 +108,16 @@ class FileManager {
 
   async #onRlLine(line) {
     try {
-      const [userCmd, ...parsedLineArgs] = line.split(' ');
-      const normalizedCmd = userCmd.trim().toLowerCase();
+      const lineArgs = parseLineArgs(line);
 
-      const cliCmd = this.#cliCmds.find((cmd) => cmd.name === normalizedCmd);
+      const [userCmd, ...userArgs] = lineArgs;
+
+      const cliCmd = this.#cliCmds.find((cmd) => cmd.name === userCmd);
 
       if (cliCmd) {
         this.#rl.pause();
 
-        await cliCmd.method.call(this, parsedLineArgs);
+        await cliCmd.method.call(this, userArgs);
 
         this.#logCurrentWorkDirPath();
 
