@@ -63,7 +63,6 @@ class FileManager {
     this.#currentWorkDirPath = upDirPath;
   }
 
-  // TODO: add check for quotes '' in path start and in the end
   async #changeDir([destinationPath]) {
     const normalizedDestinationPath = path.normalize(destinationPath);
 
