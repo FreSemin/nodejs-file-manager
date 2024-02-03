@@ -16,9 +16,6 @@ export function fixDestinationPathWindows(destinationPath) {
     return destinationPath.replace(/:\.\.?\\?$/gm, ':\\');
   }
 
-  // if ..\ 
-  // then replace
-
   return destinationPath;
 }
 
