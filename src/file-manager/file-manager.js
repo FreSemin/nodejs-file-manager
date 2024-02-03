@@ -1,5 +1,5 @@
 import * as readline from 'node:readline/promises';
-import path, { parse } from 'node:path';
+import path from 'node:path';
 import { stdin as input, stdout as output } from 'node:process';
 import { access } from 'node:fs/promises';
 import { getProcessArgument } from '../cli/args.js';
@@ -14,7 +14,7 @@ import {
   ERROR_OPERATION_FAIL_TEXT,
   USERNAME_ARG
 } from '../constants/constants.js';
-import OperationFailed from '../utils/operation-fail.error.js';
+import { OperationFailedError, InvalidInputError } from '../utils/errors.util.js';
 
 class FileManager {
   #cliCmds = [
@@ -57,7 +57,7 @@ class FileManager {
       .catch(() => {
         this.#currentWorkDirPath = getUserHomeDir();
 
-        throw new OperationFailed();
+        throw new OperationFailedError();
       });
 
     this.#currentWorkDirPath = upDirPath;
@@ -97,7 +97,7 @@ class FileManager {
 
         this.#currentWorkDirPath = absolutePath;
       } catch {
-        throw new OperationFailed();
+        throw new OperationFailedError();
       }
     }
   }
@@ -123,14 +123,19 @@ class FileManager {
 
         this.#rl.prompt();
       } else {
-        console.log(`Invalid input`);
-
-        this.#logCurrentWorkDirPath();
-
-        this.#rl.prompt();
+        throw new InvalidInputError();
       }
-    } catch {
-      console.log(ERROR_OPERATION_FAIL_TEXT);
+    } catch (error) {
+      switch (true) {
+        case error instanceof OperationFailedError:
+          console.log(error.message);
+          break;
+        case error instanceof InvalidInputError:
+          console.log(error.message);
+          break;
+        default:
+          console.log(ERROR_OPERATION_FAIL_TEXT);
+      }
 
       this.#logCurrentWorkDirPath();
 

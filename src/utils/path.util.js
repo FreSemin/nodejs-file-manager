@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { ROOT_DIR, PATH_IN, PATH_EMPTY } from '../constants/constants.js';
+import { InvalidInputError } from './errors.util.js';
 
 export function getUpDirPath(dirPath) {
   const parsedPath = path.parse(dirPath);
@@ -39,7 +40,7 @@ export function fixDestinationPathWindows(destinationPath) {
 
 export function parseLineArgs(inputStr) {
   if (!inputStr) {
-    throw new Error('Invalid Input');
+    throw new InvalidInputError();
   }
 
   let normalizedStr = inputStr.trim().toLowerCase();
