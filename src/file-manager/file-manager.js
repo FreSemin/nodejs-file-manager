@@ -3,7 +3,11 @@ import path from 'node:path';
 import { stdin as input, stdout as output } from 'node:process';
 import { access } from 'node:fs/promises';
 import { getProcessArgument } from '../cli/args.js';
-import { getDirItems, logFileContent } from '../fs/fs.js';
+import {
+  addNewFile,
+  getDirItems,
+  logFileContent
+} from '../fs/fs.js';
 import {
   getUpDirPath,
   fixDestinationPathWindows,
@@ -34,6 +38,10 @@ class FileManager {
     {
       name: 'cat',
       method: this.#cat,
+    },
+    {
+      name: 'add',
+      method: this.#add,
     },
     {
       name: '.exit',
@@ -93,6 +101,10 @@ class FileManager {
     const normalizedFilePath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, filePath);
 
     await logFileContent(normalizedFilePath);
+  }
+
+  async #add([fileName]) {
+    await addNewFile(this.#currentWorkDirPath, fileName);
   }
 
   #logCurrentWorkDirPath() {
