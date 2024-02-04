@@ -1,5 +1,5 @@
 import { createReadStream } from 'node:fs';
-import { readdir, stat, } from 'node:fs/promises';
+import { readdir, stat, writeFile, } from 'node:fs/promises';
 import path from 'node:path';
 import { OperationFailedError } from '../utils/errors.util.js';
 import { DIRECTORY_TYPE, FILE_TYPE } from '../constants/constants.js';
@@ -52,4 +52,10 @@ export async function logFileContent(filePath) {
     fileContentStream.on('end', resolve);
     fileContentStream.on('error', reject);
   });
+}
+
+export async function addNewFile(dirPath, fileName) {
+  const filePath = path.join(dirPath, fileName);
+
+  await writeFile(filePath, '', { flag: 'wx' });
 }
