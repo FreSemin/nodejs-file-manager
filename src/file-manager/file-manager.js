@@ -11,7 +11,6 @@ import {
 } from '../utils/path.util.js';
 import { getUserHomeDir } from '../os/os.js';
 import {
-  ROOT_DIR, PATH_UP,
   ERROR_OPERATION_FAIL_TEXT,
   USERNAME_ARG
 } from '../constants/constants.js';
