@@ -1,5 +1,4 @@
 import path from 'node:path';
-import { ROOT_DIR, PATH_IN, PATH_EMPTY } from '../constants/constants.js';
 import { InvalidInputError, OperationFailedError } from './errors.util.js';
 import { access } from 'node:fs/promises';
 
