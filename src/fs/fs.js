@@ -68,3 +68,7 @@ export async function addNewFile(dirPath, fileName) {
 export async function renameFile(filePath, newName) {
   await rename(filePath, newName);
 };
+
+export function getFileName(filePath) {
+  return path.basename(filePath);
+}
