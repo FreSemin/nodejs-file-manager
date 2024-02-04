@@ -26,7 +26,7 @@ export function parseLineArgs(inputStr) {
 
   let normalizedStr = inputStr.trim().toLowerCase();
 
-  const regexp = /([\w\.\\/:]+)|("[\w\s\.\\/:]+")/g;
+  const regexp = /([\w\.\\\/:-]+)|("[\w\s\.\\\/:-]+")/g;
 
   const args = Array.from(normalizedStr.match(regexp));
 
