@@ -5,6 +5,7 @@ import { access } from 'node:fs/promises';
 import { getProcessArgument } from '../cli/args.js';
 import {
   addNewFile,
+  copyFile,
   getDirItems,
   logFileContent,
   renameFile
@@ -43,6 +44,10 @@ class FileManager {
     {
       name: 'rn',
       method: this.#renameFile,
+    },
+    {
+      name: 'cp',
+      method: this.#copyFile,
     },
     {
       name: 'add',
@@ -115,8 +120,16 @@ class FileManager {
   async #renameFile([filePath, newName]) {
     const normalizedFilePath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, filePath);
 
-    await renameFile(normalizedFilePath, newName)
+    await renameFile(normalizedFilePath, newName);
   }
+
+  async #copyFile([filePath, destinationPath]) {
+    const normalizedFilePath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, filePath);
+
+    const normalizedDestinationPath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, destinationPath);
+
+    await copyFile(normalizedFilePath, normalizedDestinationPath);
+  };
 
   #logCurrentWorkDirPath() {
     console.log(`You are currently in ${this.#currentWorkDirPath}`);
