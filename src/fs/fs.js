@@ -1,5 +1,10 @@
 import { createReadStream } from 'node:fs';
-import { readdir, stat, writeFile, } from 'node:fs/promises';
+import {
+  readdir,
+  rename,
+  stat,
+  writeFile,
+} from 'node:fs/promises';
 import path from 'node:path';
 import { OperationFailedError } from '../utils/errors.util.js';
 import { DIRECTORY_TYPE, FILE_TYPE } from '../constants/constants.js';
@@ -59,3 +64,7 @@ export async function addNewFile(dirPath, fileName) {
 
   await writeFile(filePath, '', { flag: 'wx' });
 }
+
+export async function renameFile(filePath, newName) {
+  await rename(filePath, newName);
+};
