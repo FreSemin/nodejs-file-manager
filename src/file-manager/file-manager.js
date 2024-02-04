@@ -3,6 +3,7 @@ import path from 'node:path';
 import { stdin as input, stdout as output } from 'node:process';
 import { access } from 'node:fs/promises';
 import { getProcessArgument } from '../cli/args.js';
+import { getDirItems } from '../fs/fs.js';
 import {
   getUpDirPath,
   fixDestinationPathWindows,
@@ -18,6 +19,10 @@ import { OperationFailedError, InvalidInputError } from '../utils/errors.util.js
 
 class FileManager {
   #cliCmds = [
+    {
+      name: 'ls',
+      method: this.#lsDir,
+    },
     {
       name: 'cd',
       method: this.#changeDir
@@ -48,6 +53,12 @@ class FileManager {
     }
 
     console.log(`Welcome to the File Manager, ${this.#username}!`);
+  }
+
+  async #lsDir() {
+    const dirContent = await getDirItems(this.#currentWorkDirPath);
+
+    console.table(dirContent);
   }
 
   async #dirUp() {
