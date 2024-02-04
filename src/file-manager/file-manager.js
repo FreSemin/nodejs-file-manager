@@ -84,24 +84,9 @@ class FileManager {
     // Fix: Windows going up (..\..\..\) path bug
     // Use next variable if you faced with problems on your platform
     // let fixedDestinationPath = normalizedDestinationPath;
-    let fixedDestinationPath = fixDestinationPathWindows(normalizedDestinationPath);
+    const fixedDestinationPath = fixDestinationPathWindows(normalizedDestinationPath);
 
-    let relativePath = path.normalize(path.join(this.#currentWorkDirPath, fixedDestinationPath));
-
-    try {
-      await access(relativePath);
-      this.#currentWorkDirPath = relativePath;
-    } catch {
-      try {
-        const absolutePath = path.normalize(path.join(fixedDestinationPath));
-
-        await access(absolutePath);
-
-        this.#currentWorkDirPath = absolutePath;
-      } catch {
-        throw new OperationFailedError();
-      }
-    }
+    this.#currentWorkDirPath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, fixedDestinationPath);
   }
 
   async #cat([filePath]) {
