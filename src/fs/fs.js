@@ -1,4 +1,5 @@
-import { readdir, stat } from 'node:fs/promises';
+import { createReadStream } from 'node:fs';
+import { readdir, stat, } from 'node:fs/promises';
 import path from 'node:path';
 import { OperationFailedError } from '../utils/errors.util.js';
 import { DIRECTORY_TYPE, FILE_TYPE } from '../constants/constants.js';
@@ -41,4 +42,14 @@ export async function getDirItems(dirPath) {
   } catch {
     throw new OperationFailedError();
   }
+}
+
+export async function logFileContent(filePath) {
+  await new Promise((resolve, reject) => {
+    const fileContentStream = createReadStream(filePath, { encoding: 'utf-8' });
+
+    fileContentStream.on('data', (chunk) => console.log(chunk));
+    fileContentStream.on('end', resolve);
+    fileContentStream.on('error', reject);
+  });
 }
