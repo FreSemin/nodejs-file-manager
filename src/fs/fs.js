@@ -1,4 +1,4 @@
-import { createReadStream } from 'node:fs';
+import { createReadStream, createWriteStream } from 'node:fs';
 import {
   readdir,
   rename,
@@ -8,6 +8,7 @@ import {
 import path from 'node:path';
 import { OperationFailedError } from '../utils/errors.util.js';
 import { DIRECTORY_TYPE, FILE_TYPE } from '../constants/constants.js';
+import { pipeline } from 'node:stream/promises';
 
 export async function getDirItems(dirPath) {
   try {
@@ -71,4 +72,13 @@ export async function renameFile(filePath, newName) {
 
 export function getFileName(filePath) {
   return path.basename(filePath);
+}
+
+export async function copyFile(filePath, destinationPath) {
+  const fileName = await getFileName(filePath);
+
+  await pipeline(
+    createReadStream(filePath),
+    createWriteStream(path.join(destinationPath, fileName))
+  );
 }
