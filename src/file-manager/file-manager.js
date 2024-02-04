@@ -3,11 +3,12 @@ import path from 'node:path';
 import { stdin as input, stdout as output } from 'node:process';
 import { access } from 'node:fs/promises';
 import { getProcessArgument } from '../cli/args.js';
-import { getDirItems } from '../fs/fs.js';
+import { getDirItems, logFileContent } from '../fs/fs.js';
 import {
   getUpDirPath,
   fixDestinationPathWindows,
-  parseLineArgs
+  parseLineArgs,
+  getRelativeOrAbsoluteDestinationPath
 } from '../utils/path.util.js';
 import { getUserHomeDir } from '../os/os.js';
 import {
@@ -29,6 +30,10 @@ class FileManager {
     {
       name: 'up',
       method: this.#dirUp,
+    },
+    {
+      name: 'cat',
+      method: this.#cat,
     },
     {
       name: '.exit',
@@ -97,6 +102,12 @@ class FileManager {
         throw new OperationFailedError();
       }
     }
+  }
+
+  async #cat([filePath]) {
+    const normalizedFilePath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, filePath);
+
+    await logFileContent(normalizedFilePath);
   }
 
   #logCurrentWorkDirPath() {
