@@ -6,7 +6,8 @@ import { getProcessArgument } from '../cli/args.js';
 import {
   addNewFile,
   getDirItems,
-  logFileContent
+  logFileContent,
+  renameFile
 } from '../fs/fs.js';
 import {
   getUpDirPath,
@@ -38,6 +39,10 @@ class FileManager {
     {
       name: 'cat',
       method: this.#cat,
+    },
+    {
+      name: 'rn',
+      method: this.#renameFile,
     },
     {
       name: 'add',
@@ -105,6 +110,12 @@ class FileManager {
 
   async #add([fileName]) {
     await addNewFile(this.#currentWorkDirPath, fileName);
+  }
+
+  async #renameFile([filePath, newName]) {
+    const normalizedFilePath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, filePath);
+
+    await renameFile(normalizedFilePath, newName)
   }
 
   #logCurrentWorkDirPath() {
