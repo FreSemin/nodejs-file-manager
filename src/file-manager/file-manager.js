@@ -51,6 +51,10 @@ class FileManager {
       method: this.#copyFile,
     },
     {
+      name: 'mv',
+      method: this.#moveFile,
+    },
+    {
       name: 'rm',
       method: this.#removeFile,
     },
@@ -134,6 +138,16 @@ class FileManager {
     const normalizedDestinationPath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, destinationPath);
 
     await copyFile(normalizedFilePath, normalizedDestinationPath);
+  };
+
+  async #moveFile([filePath, destinationPath]) {
+    const normalizedFilePath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, filePath);
+
+    const normalizedDestinationPath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, destinationPath);
+
+    await copyFile(normalizedFilePath, normalizedDestinationPath);
+
+    await removeFile(normalizedFilePath);
   };
 
   async #removeFile([filePath]) {
