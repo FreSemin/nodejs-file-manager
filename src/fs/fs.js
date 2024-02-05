@@ -2,6 +2,7 @@ import { createReadStream, createWriteStream } from 'node:fs';
 import {
   readdir,
   rename,
+  rm,
   stat,
   writeFile,
 } from 'node:fs/promises';
@@ -81,4 +82,8 @@ export async function copyFile(filePath, destinationPath) {
     createReadStream(filePath),
     createWriteStream(path.join(destinationPath, fileName))
   );
+}
+
+export async function removeFile(filePath) {
+  await rm(filePath);
 }
