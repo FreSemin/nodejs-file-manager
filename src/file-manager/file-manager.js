@@ -25,6 +25,7 @@ import {
 import { OperationFailedError, InvalidInputError } from '../utils/errors.util.js';
 import { calcHash } from '../hash/hash.js';
 import { compress, decompress } from '../zip/zip.js';
+import { validateArgs } from '../utils/args.util.js';
 
 class FileManager {
   #cliCmds = [
@@ -126,6 +127,8 @@ class FileManager {
   }
 
   async #changeDir([destinationPath]) {
+    validateArgs([destinationPath]);
+
     const normalizedDestinationPath = path.normalize(destinationPath);
 
     // Fix: Windows going up (..\..\..\) path bug
@@ -137,22 +140,31 @@ class FileManager {
   }
 
   async #cat([filePath]) {
+    validateArgs([filePath]);
+
     const normalizedFilePath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, filePath);
 
     await logFileContent(normalizedFilePath);
   }
 
   async #add([fileName]) {
+    validateArgs([fileName]);
+
     await addNewFile(this.#currentWorkDirPath, fileName);
   }
 
   async #renameFile([filePath, newName]) {
+    validateArgs([filePath, newName]);
+
+
     const normalizedFilePath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, filePath);
 
     await renameFile(normalizedFilePath, newName);
   }
 
   async #copyFile([filePath, destinationPath]) {
+    validateArgs([filePath, destinationPath]);
+
     const normalizedFilePath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, filePath);
 
     const normalizedDestinationPath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, destinationPath);
@@ -161,6 +173,8 @@ class FileManager {
   };
 
   async #moveFile([filePath, destinationPath]) {
+    validateArgs([filePath, destinationPath]);
+
     const normalizedFilePath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, filePath);
 
     const normalizedDestinationPath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, destinationPath);
@@ -171,6 +185,8 @@ class FileManager {
   };
 
   async #removeFile([filePath]) {
+    validateArgs([filePath]);
+
     const normalizedFilePath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, filePath);
 
     await removeFile(normalizedFilePath);
@@ -181,10 +197,14 @@ class FileManager {
   };
 
   async #osOperation([argument]) {
+    validateArgs([argument]);
+
     await performOSOperation(argument);
   }
 
   async #hash([filePath]) {
+    validateArgs([filePath]);
+
     const normalizedFilePath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, filePath);
 
     const fileHash = await calcHash(normalizedFilePath);
@@ -193,6 +213,8 @@ class FileManager {
   }
 
   async #compressFile([filePath, destinationPath]) {
+    validateArgs([filePath, destinationPath]);
+
     const normalizedFilePath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, filePath);
 
     const normalizedDestinationPath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, destinationPath);
@@ -201,6 +223,8 @@ class FileManager {
   }
 
   async #decompressFile([filePath, destinationPath]) {
+    validateArgs([filePath, destinationPath]);
+
     const normalizedFilePath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, filePath);
 
     const normalizedDestinationPath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, destinationPath);
