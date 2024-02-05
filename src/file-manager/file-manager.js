@@ -24,6 +24,7 @@ import {
 } from '../constants/constants.js';
 import { OperationFailedError, InvalidInputError } from '../utils/errors.util.js';
 import { calcHash } from '../hash/hash.js';
+import { compress, decompress } from '../zip/zip.js';
 
 class FileManager {
   #cliCmds = [
@@ -70,6 +71,14 @@ class FileManager {
     {
       name: 'hash',
       method: this.#hash,
+    },
+    {
+      name: 'compress',
+      method: this.#compressFile,
+    },
+    {
+      name: 'decompress',
+      method: this.#decompressFile,
     },
     {
       name: '.exit',
@@ -179,6 +188,22 @@ class FileManager {
     const fileHash = await calcHash(normalizedFilePath);
 
     console.log(fileHash);
+  }
+
+  async #compressFile([filePath, destinationPath]) {
+    const normalizedFilePath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, filePath);
+
+    const normalizedDestinationPath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, destinationPath);
+
+    await compress(normalizedFilePath, normalizedDestinationPath);
+  }
+
+  async #decompressFile([filePath, destinationPath]) {
+    const normalizedFilePath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, filePath);
+
+    const normalizedDestinationPath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, destinationPath);
+
+    await decompress(normalizedFilePath, normalizedDestinationPath);
   }
 
   async #onRlLine(line) {
