@@ -20,6 +20,12 @@ export async function performOSOperation(argument) {
 
       break;
     }
+    case '--homedir': {
+      console.log(getUserHomeDir());
+
+      break;
+    }
+
 
     default: {
       throw new InvalidInputError();
