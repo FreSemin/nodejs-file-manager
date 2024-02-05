@@ -9,6 +9,10 @@ export function getUserInfo() {
   return os.userInfo();
 }
 
+export function getArch() {
+  return os.arch();
+}
+
 export function getEOL() {
   return os.EOL;
 }
@@ -31,6 +35,11 @@ export async function performOSOperation(argument) {
     }
     case '--username': {
       console.log(getUserInfo().username);
+
+      break;
+    }
+    case '--architecture': {
+      console.log(getArch());
 
       break;
     }
