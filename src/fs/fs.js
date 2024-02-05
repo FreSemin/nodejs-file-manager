@@ -10,6 +10,7 @@ import path from 'node:path';
 import { OperationFailedError } from '../utils/errors.util.js';
 import { DIRECTORY_TYPE, FILE_TYPE } from '../constants/constants.js';
 import { pipeline } from 'node:stream/promises';
+import { getUpDirPath } from '../utils/path.util.js';
 
 export async function getDirItems(dirPath) {
   try {
@@ -68,7 +69,9 @@ export async function addNewFile(dirPath, fileName) {
 }
 
 export async function renameFile(filePath, newName) {
-  await rename(filePath, newName);
+  const fileToRenameDirPath = getUpDirPath(filePath);
+
+  await rename(filePath, path.join(fileToRenameDirPath, newName));
 };
 
 export function getFileName(filePath) {

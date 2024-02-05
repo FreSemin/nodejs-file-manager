@@ -156,7 +156,6 @@ class FileManager {
   async #renameFile([filePath, newName]) {
     validateArgs([filePath, newName]);
 
-
     const normalizedFilePath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, filePath);
 
     await renameFile(normalizedFilePath, newName);
