@@ -5,7 +5,7 @@ import path from 'node:path';
 import { createBrotliCompress, createBrotliDecompress } from 'node:zlib';
 
 export async function compress(fileForCompressPath, destinationPath) {
-  const compressedFileName = getFileName(fileForCompressPath) + '.gz';
+  const compressedFileName = getFileName(fileForCompressPath) + '.br';
 
   const fileForCompressStream = createReadStream(fileForCompressPath);
 
@@ -24,7 +24,7 @@ export async function compress(fileForCompressPath, destinationPath) {
 export async function decompress(fileForDecompressPath, destinationPath) {
   let decompressedFileName = getFileName(fileForDecompressPath);
 
-  if (decompressedFileName.endsWith('.gz')) {
+  if (decompressedFileName.endsWith('.br')) {
     decompressedFileName = decompressedFileName.slice(0, -3);
   }
 
