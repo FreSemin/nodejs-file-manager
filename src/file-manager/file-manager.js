@@ -17,7 +17,7 @@ import {
   parseLineArgs,
   getRelativeOrAbsoluteDestinationPath
 } from '../utils/path.util.js';
-import { getUserHomeDir } from '../os/os.js';
+import { getUserHomeDir, performOSOperation } from '../os/os.js';
 import {
   ERROR_OPERATION_FAIL_TEXT,
   USERNAME_ARG
@@ -61,6 +61,10 @@ class FileManager {
     {
       name: 'add',
       method: this.#add,
+    },
+    {
+      name: 'os',
+      method: this.#osOperation,
     },
     {
       name: '.exit',
@@ -159,6 +163,10 @@ class FileManager {
   #logCurrentWorkDirPath() {
     console.log(`You are currently in ${this.#currentWorkDirPath}`);
   };
+
+  async #osOperation([argument]) {
+    await performOSOperation(argument);
+  }
 
   async #onRlLine(line) {
     try {
