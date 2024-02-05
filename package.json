@@ -6,10 +6,10 @@
     "node": ">=20.0.0"
   },
   "type": "module",
-  "main": "main.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node src/main.js",
-    "start:dev": "node --watch src/main.js"
+    "start": "node src/app.js",
+    "start:dev": "node --watch src/app.js"
   },
   "author": "",
   "license": "ISC"
