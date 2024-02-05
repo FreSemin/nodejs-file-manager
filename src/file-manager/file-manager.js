@@ -8,6 +8,7 @@ import {
   copyFile,
   getDirItems,
   logFileContent,
+  removeFile,
   renameFile
 } from '../fs/fs.js';
 import {
@@ -48,6 +49,10 @@ class FileManager {
     {
       name: 'cp',
       method: this.#copyFile,
+    },
+    {
+      name: 'rm',
+      method: this.#removeFile,
     },
     {
       name: 'add',
@@ -130,6 +135,12 @@ class FileManager {
 
     await copyFile(normalizedFilePath, normalizedDestinationPath);
   };
+
+  async #removeFile([filePath]) {
+    const normalizedFilePath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, filePath);
+
+    await removeFile(normalizedFilePath);
+  }
 
   #logCurrentWorkDirPath() {
     console.log(`You are currently in ${this.#currentWorkDirPath}`);
