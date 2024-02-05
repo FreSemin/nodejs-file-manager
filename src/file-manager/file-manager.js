@@ -132,7 +132,7 @@ class FileManager {
     const normalizedDestinationPath = path.normalize(destinationPath);
 
     // Fix: Windows going up (..\..\..\) path bug
-    // Use next variable if you faced with problems on your platform
+    // Use next variable if you have faced with problems on your platform
     // let fixedDestinationPath = normalizedDestinationPath;
     const fixedDestinationPath = fixDestinationPathWindows(normalizedDestinationPath);
 
