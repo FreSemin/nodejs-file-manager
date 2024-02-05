@@ -9,6 +9,16 @@ export function getUserInfo() {
   return os.userInfo();
 }
 
+export function getCpus() {
+
+  return os.cpus().map((cpu) => {
+    return {
+      model: cpu.model,
+      speed: cpu.speed / 1000 + ' GHz'
+    };
+  });
+}
+
 export function getArch() {
   return os.arch();
 }
@@ -35,6 +45,11 @@ export async function performOSOperation(argument) {
     }
     case '--username': {
       console.log(getUserInfo().username);
+
+      break;
+    }
+    case '--cpus': {
+      console.table(getCpus());
 
       break;
     }
