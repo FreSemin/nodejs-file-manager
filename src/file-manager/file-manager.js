@@ -17,7 +17,7 @@ import {
   parseLineArgs,
   getRelativeOrAbsoluteDestinationPath
 } from '../utils/path.util.js';
-import { getUserHomeDir, performOSOperation } from '../os/os.js';
+import { getUserHomeDir, getUserInfo, performOSOperation } from '../os/os.js';
 import {
   ERROR_OPERATION_FAIL_TEXT,
   USERNAME_ARG
@@ -95,10 +95,12 @@ class FileManager {
     this.#currentWorkDirPath = getUserHomeDir();
   }
 
-  // TODO: get username from os
   #welcomeUser() {
+    this.#username = getProcessArgument(USERNAME_ARG);
+
     if (!this.#username) {
-      this.#username = getProcessArgument(USERNAME_ARG);
+      const sysUsername = getUserInfo().username;
+      this.#username = sysUsername ? sysUsername : 'anonyms';
     }
 
     console.log(`Welcome to the File Manager, ${this.#username}!`);
