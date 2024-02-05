@@ -23,6 +23,7 @@ import {
   USERNAME_ARG
 } from '../constants/constants.js';
 import { OperationFailedError, InvalidInputError } from '../utils/errors.util.js';
+import { calcHash } from '../hash/hash.js';
 
 class FileManager {
   #cliCmds = [
@@ -65,6 +66,10 @@ class FileManager {
     {
       name: 'os',
       method: this.#osOperation,
+    },
+    {
+      name: 'hash',
+      method: this.#hash,
     },
     {
       name: '.exit',
@@ -166,6 +171,14 @@ class FileManager {
 
   async #osOperation([argument]) {
     await performOSOperation(argument);
+  }
+
+  async #hash([filePath]) {
+    const normalizedFilePath = await getRelativeOrAbsoluteDestinationPath(this.#currentWorkDirPath, filePath);
+
+    const fileHash = await calcHash(normalizedFilePath);
+
+    console.log(fileHash);
   }
 
   async #onRlLine(line) {
