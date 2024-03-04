@@ -2,8 +2,15 @@
   "name": "nodejs-file-manager",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
-  "scripts": {},
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "start:dev": "node --watch src/app.js"
+  },
   "author": "",
   "license": "ISC"
 }
